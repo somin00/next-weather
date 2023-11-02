@@ -3,15 +3,23 @@ import { getForecastWeather } from "@/utils/getForecast";
 
 type Props = {
   params: { location: string };
+  searchParams: { name: string };
 };
-export default async function Detail({ params }: Props) {
+
+export function generateMetadata({ searchParams }: Props) {
+  return {
+    title: `${searchParams.name} 날씨 앱`,
+    description: `${searchParams.name}의 날씨를 알려드립니다.`,
+  };
+}
+
+export default async function Detail({ params, searchParams }: Props) {
   const location = params.location;
-  const name = location === "seoul" ? "서울" : location === "newyork" ? "뉴욕" : "런던";
 
   const forecastRes = await getForecastWeather(location);
   return (
     <>
-      <h1> {name} 일기 예보</h1>
+      <h1> {searchParams.name} 일기 예보</h1>
       <ul>
         {forecastRes.forecast.forecastday.map((day) => (
           <li key={day.date}>
